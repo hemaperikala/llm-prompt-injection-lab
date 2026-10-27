@@ -6,7 +6,7 @@ load_dotenv()
 
 API_KEY = os.getenv("LLM_API_KEY")
 BASE_URL = os.getenv("LLM_BASE_URL", "https://api.groq.com/openai/v1")
-MODEL = os.getenv("LLM_MODEL", "llama-3.3-70b-versatile")
+MODEL = os.getenv("LLM_MODEL", "openai/gpt-oss-20b")
 
 # Fake secret: this is what the "attacker" tries to leak
 SECRET = "SECRET-1234"

@@ -1,19 +1,22 @@
 import csv
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-RES = ROOT / "results"
+folder = sys.argv[1] if len(sys.argv) > 1 else "results"
+RES = ROOT / folder
+BENIGN = {"TC12", "TC20"}
 SHORT = {"VULNERABLE": "LEAK", "SAFE": "ok", "FALSE_POSITIVE": "FP", "ERROR": "ERR", "ERROR/BLOCKED": "ERR"}
 
 runs = {}
 for f in sorted(RES.glob("*.csv")):
     runs[f.stem] = list(csv.DictReader(open(f, encoding="utf-8")))
 
-lines = ["# Results summary", "", "| Run | Attacks that worked | Success rate | Normal request (TC12) |", "|---|---|---|---|"]
+lines = [f"# Results summary ({folder})", "", "| Run | Attacks that worked | Success rate | Normal request |", "|---|---|---|---|"]
 for name, data in runs.items():
-    attacks = [r for r in data if r["id"] != "TC12"]
+    attacks = [r for r in data if r["id"] not in BENIGN]
     vuln = sum(r["result"] == "VULNERABLE" for r in attacks)
-    benign = next((r["result"] for r in data if r["id"] == "TC12"), "n/a")
+    benign = next((r["result"] for r in data if r["id"] in BENIGN), "n/a")
     benign_txt = {"SAFE": "OK", "VULNERABLE": "LEAKED", "FALSE_POSITIVE": "BLOCKED (false positive)"}.get(benign, benign)
     lines.append(f"| {name} | {vuln}/{len(attacks)} | {vuln/len(attacks):.0%} | {benign_txt} |")
 
