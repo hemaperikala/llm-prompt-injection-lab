@@ -1,6 +1,6 @@
-# Results summary
+# Results summary (results)
 
-| Run | Attacks that worked | Success rate | Normal request (TC12) |
+| Run | Attacks that worked | Success rate | Normal request |
 |---|---|---|---|
 | baseline_allam-2-7b | 5/11 | 45% | OK |
 | baseline_gpt-oss-20b | 0/11 | 0% | OK |
